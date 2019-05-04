@@ -144,6 +144,7 @@ class Game(ShowBase):
         self.counting = True
         self.playing = True
         self.playRaceMusic = False
+        self.menuDisplayed = False
         
         #data init
         self.vDataRows = 100
@@ -429,7 +430,8 @@ class Game(ShowBase):
             self.playing = False
         
         dt = globalClock.getDt()
-        self.timeDelay += dt
+        if not self.menuDisplayed:
+            self.timeDelay += dt
         
         #enable moving mario with direction keys
         h_speed = self.mario.h_speed
@@ -719,10 +721,13 @@ class Game(ShowBase):
     
     def countdown(self, task):
         #display countdown before game starts
+        print(taskMgr)
         taskMgr.remove('start')
         
         dt = globalClock.getDt()
-        self.timeDelay += dt
+        # print(dt)
+        if not self.menuDisplayed:
+            self.timeDelay += dt
         interval = self.wait/3
         
         #countdown sound effect
@@ -731,17 +736,21 @@ class Game(ShowBase):
             self.counting = False
         
         if self.timeDelay < interval*1:
+            # print(self.timeDelay, interval*1)
             display = displayBigText('3', (1.3,-1), (255,255,255,1), (255,0,0,1))
             self.countdowns.append(display)
         elif self.timeDelay < interval*2:
+            # print(self.timeDelay, interval*2)
             for display in self.countdowns: display.destroy()
             display = displayBigText('2', (1.3,-1), (255,255,255,1), (255,255,0,1))
             self.countdowns.append(display)
         elif self.timeDelay < interval*3:
+            # print(self.timeDelay, interval*3)
             for display in self.countdowns: display.destroy()
             display = displayBigText('1', (1.3,-1), (255,255,255,1), (0,255,0,1))
             self.countdowns.append(display)
         elif self.timeDelay < interval*4:
+            # print(self.timeDelay, interval*4)
             for display in self.countdowns: display.destroy()
             display = displayBigText('GO!', (1.1,-1), (255,255,255,1))
             self.countdowns.append(display)
@@ -794,6 +803,7 @@ class Game(ShowBase):
                         "during drift, use Up/Down in place of Right/Left" ]
         
         if keyInput == 'display':
+            self.menuDisplayed = True
             self.menuCount += 1
             if self.menuCount > 1: return
             
@@ -823,6 +833,7 @@ class Game(ShowBase):
                 self.menuStart = False
                   
         if keyInput == 'remove':
+            self.menuDisplayed = False
             #escape menu
             self.menuCount = 0
             self.paused = True
@@ -833,9 +844,9 @@ class Game(ShowBase):
             self.circularRoad()
             self.displayLives()
             self.displayLaps()
-            taskMgr.add(self.moveSim, 'moveSim')
-            taskMgr.add(self.countdown, 'countdown')
-            taskMgr.add(self.move, "move")
+            # taskMgr.add(self.moveSim, 'moveSim')
+            # taskMgr.add(self.countdown, 'countdown')
+            # taskMgr.add(self.move, "move")
             taskMgr.add(self.mapPrev, 'map')
             taskMgr.add(self.takeLives, 'lives')
             taskMgr.add(self.moveCam, 'cam')
