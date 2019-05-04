@@ -722,9 +722,9 @@ class Game(ShowBase):
             
             self.straightRoad()
             self.displayLives()
-            taskMgr.add(self.moveSim, 'moveSim')
-            taskMgr.add(self.countdown, 'countdown')
-            taskMgr.add(self.move, "move")
+            # taskMgr.add(self.moveSim, 'moveSim')
+            # taskMgr.add(self.countdown, 'countdown')
+            # taskMgr.add(self.move, "move")
             taskMgr.add(self.mapPrev, 'map')
             taskMgr.add(self.takeLives, 'lives')
             taskMgr.add(self.moveCam, 'cam')
